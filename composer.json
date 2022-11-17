@@ -1,6 +1,6 @@
 {
   "name": "devly/utils",
-  "description": "description",
+  "description": "A Collection of useful php helper functions and classes.",
   "minimum-stability": "stable",
   "prefer-stable": true,
   "autoload": {
