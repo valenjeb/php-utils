@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Devly\Utils\Tests;
 
-use Devly\Exceptions\ValidationError;
+use Devly\Exceptions\ValidationException;
 use Devly\Utils\Validator;
 use PHPUnit\Framework\TestCase;
 
@@ -17,7 +17,7 @@ class ValidatorTest extends TestCase
 
     public function testInvalidPhoneNumberThrowsException(): void
     {
-        $this->expectException(ValidationError::class);
+        $this->expectException(ValidationException::class);
 
         Validator::validatePhoneNumber('+01-202-555-0198', Validator::PHONE_PATTERN_E164);
     }
@@ -34,7 +34,7 @@ class ValidatorTest extends TestCase
 
     public function testInvalidIsraeliIdNumberThrowsException(): void
     {
-        $this->expectException(ValidationError::class);
+        $this->expectException(ValidationException::class);
 
         Validator::validateIsraeliIdNumber('133456782');
     }
@@ -46,7 +46,7 @@ class ValidatorTest extends TestCase
 
     public function testInvalidEmailThrowsException(): void
     {
-        $this->expectException(ValidationError::class);
+        $this->expectException(ValidationException::class);
 
         Validator::validateEmail('me@example');
     }

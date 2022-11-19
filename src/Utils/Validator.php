@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Devly\Utils;
 
-use Devly\Exceptions\ValidationError;
+use Devly\Exceptions\ValidationException;
 
 use function array_reduce;
 use function is_numeric;
@@ -20,7 +20,7 @@ class Validator
     public const PHONE_PATTERN_E164  = '/^(\+)?[1-9]{1,3}[0-9]{1,3}[0-9]{7,8}$/';
     public const PHONE_PATTERN_LOCAL = '/^[0-9]{2,3}[0-9]{7,8}$/';
 
-    /** @throws ValidationError */
+    /** @throws ValidationException */
     public static function validateEmail(string $value): bool
     {
         if (
@@ -29,17 +29,17 @@ class Validator
                 $value
             )
         ) {
-            throw new ValidationError('Invalid email address');
+            throw new ValidationException('Invalid email address');
         }
 
         return true;
     }
 
-    /** @throws ValidationError */
+    /** @throws ValidationException */
     public static function validateIsraeliIdNumber(string $value): bool
     {
         if (! is_numeric($value) || Str::length($value) > 9) {
-            throw new ValidationError('Invalid ID number');
+            throw new ValidationException('Invalid ID number');
         }
 
         $id    = Str::length($value) < 9 ? substr('00000000' . $value, -9) : $value;
@@ -53,13 +53,13 @@ class Validator
         }, 0) % 10 === 0;
 
         if (! $valid) {
-            throw new ValidationError('Invalid ID number');
+            throw new ValidationException('Invalid ID number');
         }
 
         return true;
     }
 
-    /** @throws ValidationError */
+    /** @throws ValidationException */
     public static function validatePhoneNumber(string $phone, string $pattern, bool $sanitize = true): bool
     {
         if ($sanitize) {
@@ -67,7 +67,7 @@ class Validator
         }
 
         if (preg_match($pattern, $phone) !== 1) {
-            throw new ValidationError('Invalid phone number.');
+            throw new ValidationException('Invalid phone number.');
         }
 
         return preg_match($pattern, $phone) === 1;

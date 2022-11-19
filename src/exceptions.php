@@ -34,7 +34,7 @@ class DirectoryNotFoundException extends IOException
 {
 }
 
-class ValidationError extends Exception
+class ValidationException extends Exception
 {
 }
 
