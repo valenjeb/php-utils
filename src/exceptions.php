@@ -34,10 +34,28 @@ class DirectoryNotFoundException extends IOException
 {
 }
 
+
+/**
+ * The exception that is thrown on validation error.
+ */
 class ValidationException extends Exception
 {
 }
 
 class NotSupportedException extends LogicException
+{
+}
+
+/**
+ * The exception that is thrown when a database error occurs.
+ */
+class DatabaseException extends RuntimeException
+{
+}
+
+/**
+ * The exception that is thrown when retrieving an object that does not exist in database.
+ */
+class ObjectNotFoundException extends DatabaseException
 {
 }
