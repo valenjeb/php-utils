@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Devly\Utils;
 
-use Devly\Exceptions\InvalidArgumentException;
+use InvalidArgumentException;
 
 use function array_combine;
 use function array_filter;
@@ -45,8 +45,6 @@ class Arr
      * @param  ?T                    $default
      *
      * @return ?T
-     *
-     * @throws InvalidArgumentException if item does not exist and default value is not provided.
      *
      * @template T
      */
@@ -91,8 +89,6 @@ class Arr
      * @param  array-key|array-key[] $key
      *
      * @return ?T
-     *
-     * @throws InvalidArgumentException if traversed item is not an array.
      *
      * @template T
      */
@@ -294,9 +290,6 @@ class Arr
      * @param  ?T        $default
      *
      * @return ?T
-     *
-     * @throws InvalidArgumentException if item does not exist and default
-     *                                  value is not provided.
      *
      * @template T
      */

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Devly\Utils;
 
-use Devly\Exceptions\InvalidArgumentException;
+use InvalidArgumentException;
 use Devly\Exceptions\NotSupportedException;
 use Exception;
 use voku\helper\ASCII;
