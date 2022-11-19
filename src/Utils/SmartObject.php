@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Devly\Utils;
 
-use Error;
+use BadMethodCallException;
+use LogicException;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
+use RuntimeException;
 
 use function debug_backtrace;
 use function in_array;
@@ -15,14 +17,11 @@ use function sprintf;
 use function trigger_error;
 
 use const E_USER_DEPRECATED;
+use const E_USER_WARNING;
 
 trait SmartObject
 {
-    /**
-     * @return mixed
-     *
-     * @throws Error
-     */
+    /** @return mixed */
     public function &__get(string $name)
     {
         $class = static::class;
@@ -32,7 +31,7 @@ trait SmartObject
 
         if ($prop) {
             if (! ($prop & 0b0001)) {
-                throw new Error(sprintf('Cannot read a write-only property %s::$%s.', $class, $name));
+                throw new LogicException(sprintf('Cannot read a write-only property %s::$%s.', $class, $name));
             }
 
             $m = ($prop & 0b0010 ? 'get' : 'is') . Str::classify($name);
@@ -58,20 +57,23 @@ trait SmartObject
 
         $rc = new ReflectionClass(static::class);
         if (! $rc->hasProperty($name)) {
-            throw new Error(sprintf('Property %s::$%s does not exist', $class, $name));
+            trigger_error(
+                sprintf('Undefined property: %s::$%s', $class, $name),
+                E_USER_WARNING
+            );
+
+            $null = null;
+
+            return $null;
         }
 
         $rp     = $rc->getProperty($name);
         $access = $rp->isPrivate() ? 'private' : 'protected';
 
-        throw new Error(sprintf('Cannot read a %s property %s::$%s.', $access, $class, $name));
+        throw new LogicException(sprintf('Cannot read a %s property %s::$%s.', $access, $class, $name));
     }
 
-    /**
-     * @param mixed $value
-     *
-     * @throws Error
-     */
+    /** @param mixed $value */
     public function __set(string $name, $value): void
     {
         $class = static::class;
@@ -82,7 +84,7 @@ trait SmartObject
             return;
         } elseif ($prop = SmartObjectHelpers::getMagicProperties(static::class)[$name] ?? null) { // phpcs:ignore
             if (! ($prop & 0b1000)) {
-                throw new Error(sprintf('Cannot write to a read-only property %s::$%s.', $class, $name));
+                throw new LogicException(sprintf('Cannot write to a read-only property %s::$%s.', $class, $name));
             }
 
             $m = 'set' . Str::classify($name);
@@ -105,21 +107,24 @@ trait SmartObject
         $rc = new ReflectionClass(static::class);
 
         if (! $rc->hasProperty($name)) {
-            throw new Error(sprintf('Property %s::$%s does not exist', $class, $name));
+            trigger_error(
+                sprintf('Undefined property: %s::$%s', $class, $name),
+                E_USER_WARNING
+            );
+
+            return;
         }
 
         $rp     = $rc->getProperty($name);
         $access = $rp->isPrivate() ? 'private' : 'protected';
 
-        throw new Error(sprintf('Cannot write to a %s property %s::$%s.', $access, $class, $name));
+        throw new LogicException(sprintf('Cannot write to a %s property %s::$%s.', $access, $class, $name));
     }
 
     /**
      * @param array<T> $arguments
      *
      * @return mixed
-     *
-     * @throws Error
      *
      * @template T
      */
@@ -136,20 +141,20 @@ trait SmartObject
 
             $rm = new ReflectionMethod($this, $mn);
         } catch (ReflectionException $e) {
-            throw new Error(sprintf('Method %s::%s() does not exist', static::class, $method));
+            throw new BadMethodCallException(sprintf('Method %s::%s() does not exist', static::class, $method));
         }
 
         if ($rm->isPublic() && ! $rm->isAbstract()) {
             try {
                 return $rm->invokeArgs($this, $arguments);
             } catch (ReflectionException $e) {
-                throw new Error($e->getMessage(), $e->getCode());
+                throw new RuntimeException($e->getMessage(), $e->getCode());
             }
         }
 
         $access = $rm->isAbstract() ? 'abstract' : ($rm->isProtected() ? 'protected' : 'private');
 
-        throw new Error(sprintf(
+        throw new LogicException(sprintf(
             'Call to %s method %s::%s().',
             $access,
             static::class,
