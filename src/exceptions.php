@@ -59,3 +59,7 @@ class DatabaseException extends RuntimeException
 class ObjectNotFoundException extends DatabaseException
 {
 }
+
+class RouteNotFoundException extends RuntimeException
+{
+}
