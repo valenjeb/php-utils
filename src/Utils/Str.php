@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Devly\Utils;
 
-use InvalidArgumentException;
 use Devly\Exceptions\NotSupportedException;
 use Exception;
+use InvalidArgumentException;
 use voku\helper\ASCII;
 
 use function class_exists;
