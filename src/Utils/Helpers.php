@@ -13,6 +13,8 @@ use function is_callable;
 use function ob_end_clean;
 use function ob_get_clean;
 use function ob_start;
+use function rand;
+use function strlen;
 
 class Helpers
 {
@@ -92,5 +94,18 @@ class Helpers
             default:
                 return $type;
         }
+    }
+
+    public static function generateRandomString(int $length = 6): string
+    {
+        $chars      = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charlength = strlen($chars);
+        $str        = '';
+
+        for ($i = 0; $i < $length; $i++) {
+            $str .= $chars[rand(0, $charlength - 1)];
+        }
+
+        return $str;
     }
 }
