@@ -63,3 +63,7 @@ class ObjectNotFoundException extends DatabaseException
 class RouteNotFoundException extends RuntimeException
 {
 }
+
+class AbortException extends Exception
+{
+}
