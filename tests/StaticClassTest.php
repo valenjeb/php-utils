@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Devly\Utils\Tests;
 
-use Devly\Utils\Tests\Fake\StaticFoo;
+use Devly\Utils\Tests\Fake\StaticClassObject;
 use Exception;
 use PHPUnit\Framework\TestCase;
 
@@ -14,6 +14,6 @@ class StaticClassTest extends TestCase
     {
         $this->expectException(Exception::class);
 
-        new StaticFoo();
+        new StaticClassObject();
     }
 }

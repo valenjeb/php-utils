@@ -11,8 +11,6 @@ use ReflectionClass;
 use ReflectionFunction;
 use ReflectionMethod;
 
-use function count;
-
 class ObjTest extends TestCase
 {
     public function testCreateReflectionFunction(): void
@@ -24,15 +22,15 @@ class ObjTest extends TestCase
 
     public function testCreateReflectionMethod(): void
     {
-        $rm = Obj::createReflection([new Foo(), 'bar']);
+        $rm = Obj::createReflection([new Foo(), 'getBar']);
 
         $this->assertInstanceOf(ReflectionMethod::class, $rm);
 
-        $rm = Obj::createReflection(Foo::class . '::bar');
+        $rm = Obj::createReflection(Foo::class . '::getBar');
 
         $this->assertInstanceOf(ReflectionMethod::class, $rm);
 
-        $rm = Obj::createReflection(Foo::class . '@bar');
+        $rm = Obj::createReflection(Foo::class . '@getBar');
 
         $this->assertInstanceOf(ReflectionMethod::class, $rm);
     }
@@ -48,7 +46,6 @@ class ObjTest extends TestCase
     {
         $methods = Obj::getMethods(Foo::class);
 
-        $this->assertInstanceOf('ReflectionMethod', $methods[0]);
-        $this->assertEquals(2, count($methods));
+        $this->assertInstanceOf(ReflectionMethod::class, $methods[0]);
     }
 }
