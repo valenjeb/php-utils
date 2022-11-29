@@ -12,12 +12,14 @@ class StrTest extends TestCase
     public function testEndsWith(): void
     {
         $this->assertTrue(Str::endsWith('This is my name', 'name'));
+        $this->assertFalse(Str::endsWith('This is my name', 'foo'));
         $this->assertTrue(Str::endsWith('This is my name', ['foo', 'name']));
     }
 
     public function testStartsWith(): void
     {
         $this->assertTrue(Str::startsWith('This is my name', 'This'));
+        $this->assertFalse(Str::startsWith('This is my name', 'foo'));
         $this->assertTrue(Str::startsWith('This is my name', ['name', 'This']));
     }
 
