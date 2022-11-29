@@ -37,16 +37,18 @@ class Obj
             }
 
             if (is_array($definition)) {
-                return new ReflectionMethod($definition[0], $definition[1]);
+                [$object, $method] = $definition;
+
+                return new ReflectionMethod($object, $method);
             }
 
             return new ReflectionFunction($definition);
         }
 
         if (is_string($definition) && Str::contains($definition, '@')) {
-            $definition = explode('@', $definition);
+            [$object, $method] = explode('@', $definition);
 
-            return new ReflectionMethod($definition[0], $definition[1]);
+            return new ReflectionMethod($object, $method);
         }
 
         return new ReflectionClass($definition);
