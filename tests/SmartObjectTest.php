@@ -44,4 +44,12 @@ class SmartObjectTest extends TestCase
 
         $this->foo->baz = '';
     }
+
+    public function testSmartObjectExtenderGetSmartProperty(): void
+    {
+        $bar = new class extends Foo {};
+
+        $bar->bar = 'hello world!!';
+        $this->assertEquals('hello world!!', $bar->bar);
+    }
 }

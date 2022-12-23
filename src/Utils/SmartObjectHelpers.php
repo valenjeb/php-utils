@@ -69,13 +69,13 @@ class SmartObjectHelpers
         }
 
         foreach ($rc->getTraits() as $trait) {
-            $props = array_merge($props, self::getMagicMethods($trait->name));
+            $props += self::getMagicProperties($trait->name);
         }
 
         $parent = get_parent_class($class);
 
         if ($parent) {
-            $props = array_merge($props, self::getMagicMethods($parent));
+            $props += self::getMagicProperties($parent);
         }
 
         return $props;
@@ -111,12 +111,12 @@ class SmartObjectHelpers
         }, $matches);
 
         foreach ($rc->getTraits() as $trait) {
-            $props = array_merge($props, self::getMagicMethods($trait->name));
+            $props += self::getMagicMethods($trait->name);
         }
 
         $parent = get_parent_class($class);
         if ($parent) {
-            $props = array_merge($props, self::getMagicMethods($parent));
+            $props += self::getMagicMethods($parent);
         }
 
         return $props;
