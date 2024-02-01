@@ -32,10 +32,6 @@ class Obj
     public static function createReflection($definition)
     {
         if (is_callable($definition) || $definition instanceof Closure) {
-            if (is_string($definition) && Str::contains($definition, '::')) {
-                $definition = explode('::', $definition);
-            }
-
             if (is_array($definition)) {
                 [$object, $method] = $definition;
 
@@ -45,10 +41,20 @@ class Obj
             return new ReflectionFunction($definition);
         }
 
-        if (is_string($definition) && Str::contains($definition, '@')) {
-            [$object, $method] = explode('@', $definition);
 
-            return new ReflectionMethod($object, $method);
+        if (is_string($definition)) {
+            if (Str::contains($definition, '@')) {
+                [$object, $method] = explode('@', $definition);
+
+                return new ReflectionMethod($object, $method);
+            }
+
+            if (is_string($definition) && Str::contains($definition, '::')) {
+                [$object, $method] = explode('::', $definition);
+
+                return new ReflectionMethod($object, $method);
+            }
+
         }
 
         return new ReflectionClass($definition);

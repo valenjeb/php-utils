@@ -22,15 +22,21 @@ class ObjTest extends TestCase
 
     public function testCreateReflectionMethod(): void
     {
-        $rm = Obj::createReflection([new Foo(), 'getBar']);
-
-        $this->assertInstanceOf(ReflectionMethod::class, $rm);
-
         $rm = Obj::createReflection(Foo::class . '::getBar');
 
         $this->assertInstanceOf(ReflectionMethod::class, $rm);
+    }
 
+    public function testShouldCreateReflactionMethodWithAtSymbol(): void
+    {
         $rm = Obj::createReflection(Foo::class . '@getBar');
+
+        $this->assertInstanceOf(ReflectionMethod::class, $rm);
+    }
+
+    public function testSholdCreateReflactionMethodWithObj(): void
+    {
+        $rm = Obj::createReflection([new Foo(), 'getBar']);
 
         $this->assertInstanceOf(ReflectionMethod::class, $rm);
     }
